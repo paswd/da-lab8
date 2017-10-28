@@ -8,3 +8,6 @@ start: main.o
 
 main.o: main.cpp
 	$(COMPILLER) -c $(FLAGS) main.cpp
+
+clean:
+	-rm -f *.o *.gch *.dat da-lab8

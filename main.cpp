@@ -155,14 +155,14 @@ bool IsRowZero(TNumber *arr, size_t size) {
 	return true;
 }
 
-bool IsEqualMatrix(TNumber map[MAX_NUM][MAX_NUM], size_t m, size_t n) {
-	for (size_t i = 0; i < m; i++) {
+size_t GetRank(TNumber map[MAX_NUM][MAX_NUM], size_t m, size_t n) {
+	/*for (size_t i = 0; i < m; i++) {
 		for (size_t j = 0; j < n; j++) {
 			cout << map[i][j] << " ";
 		}
 		cout << endl;
 	}
-	cout << "===" << endl;
+	cout << "===" << endl;*/
 	vector <int> where(n, -1);
 	for (size_t col = 0, row = 0; col < n && row < m; col++) {
 		size_t sel = row;
@@ -188,7 +188,16 @@ bool IsEqualMatrix(TNumber map[MAX_NUM][MAX_NUM], size_t m, size_t n) {
 		}
 		row++;
 	}
-	vector <TNumber> ans(n, 0);
+
+	size_t rank = 0;
+
+	for (size_t i = 0; i < m; i++) {
+		if (!IsRowZero(map[i], n)) {
+			rank++;
+		}
+	}
+	return rank;
+	/*vector <TNumber> ans(n, 0);
 	for (size_t i = 0; i < n; i++) {
 		if (where[i] != -1) {
 			ans[i] = map[where[i]][n] / map[where[i]][i];
@@ -211,10 +220,10 @@ bool IsEqualMatrix(TNumber map[MAX_NUM][MAX_NUM], size_t m, size_t n) {
 		}
 	}
 	cout << "Res: 1" << endl;
-	return true;
+	return true;*/
 }
 
-bool IsLinearIndependent(TBag *base, size_t size) {
+bool IsLinearIndependent(TBag *base, size_t size, size_t current_independent) {
 	/*TBag current_base[MAX_NUM];
 	for (size_t i = 0; i < current_index->Length; i++) {
 		current_base[i] = base[current_index->Arr[i]];
@@ -239,8 +248,8 @@ bool IsLinearIndependent(TBag *base, size_t size) {
 	}
 
 	//MatrixToTriangle(matrix, (int) size, (int) base[0].Length);
-	//size_t rank = GetRank(matrix, size, base[0].Length);
-	return IsEqualMatrix(matrix, size, base[0].Length);
+	size_t rank = GetRank(matrix, size, base[0].Length);
+	//return IsEqualMatrix(matrix, size, base[0].Length);
 
 	/*size_t new_independent = 0;
 	for (size_t i = 0; i < size; i++) {
@@ -250,10 +259,10 @@ bool IsLinearIndependent(TBag *base, size_t size) {
 	}*/
 	//cout << "new_independent = " << new_independent << endl;
 	//cout << "current_indepentent = " << current_indepentent << endl;
-	/*if (rank > current_indepentent) {
+	if (rank > current_independent) {
 		return true;
 	}
-	return false;*/
+	return false;
 }
 
 int main(void) {
@@ -325,17 +334,17 @@ int main(void) {
 
 	vector <size_t> res(0);
 
-	//size_t current = 0;
+	size_t current = 0;
 
-	/*for (size_t i = 0; i < m && current < n; i++) {
+	for (size_t i = 0; i < m && current < n; i++) {
 		if (IsLinearIndependent(base, i + 1, current)) {
 			size_t pos = res.size();
 			res.resize(res.size() + 1);
 			res[pos] = base[i].InitIndex;
 			current++;
 		}
-	}*/
-	size_t cnt;
+	}
+	/*size_t cnt;
 	bool found = false;
 	for (cnt = 0; cnt < m; cnt++) {
 		if (IsLinearIndependent(base, cnt + 1)) {
@@ -343,15 +352,15 @@ int main(void) {
 			cnt++;
 			break;
 		}
-	}
+	}*/
 
-	if (!found) {
+	if (current < n) {
 		cout << "-1" << endl;
 		return 0;
 	}
-	for (size_t i = 0; i < cnt; i++) {
+	/*for (size_t i = 0; i < cnt; i++) {
 		res.push_back(base[i].InitIndex);
-	}
+	}*/
 
 	sort(res.begin(), res.end());
 
@@ -368,3 +377,17 @@ int main(void) {
 
 	return 0;
 }
+
+/*int main(void) {
+	size_t m, n;
+	cin >> m >> n;
+	TNumber map[MAX_NUM][MAX_NUM];
+	for (size_t i = 0; i < m; i++) {
+		for (size_t j = 0; j < n; j++) {
+			cin >> map[i][j];
+		}
+	}
+	cout << "Rank = " << GetRank(map, m, n) << endl;
+
+	return 0;
+}*/
